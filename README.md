@@ -42,7 +42,7 @@ Unity側では 初めてServiceLocatorを使って実装してみた。  
 # TODO
 - Server->Client への送信は TaskSend で行う
 - プロトコールを自動生成する
-- AWSで動作検証したい
+- ~~AWSで動作検証したい~~ (Done : 2017/02/20)
 - DBを使って実際の認証を行う
 - リファクタリング
 
