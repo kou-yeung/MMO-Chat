@@ -100,7 +100,7 @@ namespace Server
                     // 削除されたものがあるので情報を再送信
                     foreach (var session in sessions)
                     {
-                        session.Send(ProtoMaker.Pack(ProtoType.UserInfo));
+                        session.Send(ProtoMaker.Pack(info));
                     }
                 }
                 Task.Delay(16).Wait();
