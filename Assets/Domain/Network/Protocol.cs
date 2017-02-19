@@ -20,7 +20,6 @@ namespace Network.Proto
         CmdMove,        // 移動実行コマンド
         UserMove,       // ユーザが移動
     }
-
     static public class ProtoMaker
     {
         static public byte[] Pack(ProtoType type)
@@ -29,14 +28,14 @@ namespace Network.Proto
             byte[] size = BitConverter.GetBytes(proto.Length);
             return size.Concat(proto).ToArray();
         }
-        static public byte[] Pack<T>(ProtoType type, T obj)
+        static public byte[] Pack<T>(T obj)
         {
             var serializer = SerializationContext.Default.GetSerializer<T>();
             using (var ms = new MemoryStream())
             {
                 serializer.Pack(ms, obj);
                 byte[] data = ms.ToArray();
-                byte[] proto = BitConverter.GetBytes((int)type);
+                byte[] proto = BitConverter.GetBytes((int)Enum.Parse(typeof(ProtoType), typeof(T).Name));
                 byte[] size = BitConverter.GetBytes(data.Length + proto.Length);
                 return size.Concat(proto).Concat(data).ToArray();
             }

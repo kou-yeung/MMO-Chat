@@ -24,7 +24,7 @@ public class Room : MonoBehaviour
         {
             if (!String.IsNullOrEmpty(input.text))
             {
-                SocketService.Locator.Send(ProtoMaker.Pack(ProtoType.UserChat, new Client2Server.UserChat
+                SocketService.Locator.Send(ProtoMaker.Pack(new Client2Server.UserChat
                 {
                     Message = input.text
                 }));

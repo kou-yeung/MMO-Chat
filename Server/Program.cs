@@ -29,7 +29,7 @@ namespace Server
                     // TODO : DBから認証情報をチェック
                     session.userInfo.Auth();
                     session.userInfo.Username = auth.Username;
-                    session.Send(ProtoMaker.Pack(ProtoType.UserAuth, new Server2Client.UserAuth
+                    session.Send(ProtoMaker.Pack(new Server2Client.UserAuth
                     {
                         Username = session.userInfo.Username,
                     }));
@@ -42,11 +42,11 @@ namespace Server
                     {
                         info.Username[i] = sessions[i].userInfo.Username;
                     }
-                    session.Send(ProtoMaker.Pack(ProtoType.UserInfo, info));
+                    session.Send(ProtoMaker.Pack(info));
                     break;
                 case ProtoType.UserChat:
                     var c2sChat = ProtoMaker.Unpack<Client2Server.UserChat>(bytes);
-                    var s2CChat = ProtoMaker.Pack(ProtoType.UserChat, new Server2Client.UserChat
+                    var s2CChat = ProtoMaker.Pack(new Server2Client.UserChat
                     {
                         Username = session.userInfo.Username,
                         Message = c2sChat.Message
@@ -100,7 +100,7 @@ namespace Server
                     // 削除されたものがあるので情報を再送信
                     foreach (var session in sessions)
                     {
-                        session.Send(ProtoMaker.Pack(ProtoType.UserInfo, info));
+                        session.Send(ProtoMaker.Pack(ProtoType.UserInfo));
                     }
                 }
                 Task.Delay(16).Wait();

@@ -27,7 +27,7 @@ public class Login : MonoBehaviour
 
         var client = SocketService.Locator;
         if (!client.Connected()) client.Connect("127.0.0.1", 2001);
-        client.Send(ProtoMaker.Pack(ProtoType.UserAuth, new Client2Server.UserAuth
+        client.Send(ProtoMaker.Pack(new Client2Server.UserAuth
         {
             Username = Id.text,
             Password = Pw.text,
