@@ -10,10 +10,9 @@ namespace Network
         static public readonly int BufferSize = 1024;
 
         int? available;  // 残りデータ量
-        List<byte> buffer = new List<byte>();
-        byte[] bytes = new byte[BufferSize];
         Stream stream;
-        StringBuilder sb = new StringBuilder();
+        byte[] buffer = new byte[BufferSize];   // 取り出す用バッファ
+        List<byte> data = new List<byte>();     // 受信したデータ
 
         public PacketHelper(Stream stream)
         {
@@ -28,16 +27,16 @@ namespace Network
 
             if (available == null)
             {
-                readBytes = stream.Read(bytes, 0, BufferSize);
-                available = BitConverter.ToInt32(bytes, 0);     // データの長さ取得
+                readBytes = stream.Read(buffer, 0, BufferSize);
+                available = BitConverter.ToInt32(buffer, 0);     // データの長さ取得
                 readBytes -= 4;                                 // サイズを減らす
-                buffer.AddRange(bytes.Skip(4).Take(readBytes)); // 残りデータは buffer に追加
+                data.AddRange(buffer.Skip(4).Take(readBytes)); // 残りデータは buffer に追加
             }
             else
             {
                 // 複数の通信が一緒に来ると想定し、残りデータ量以上読みだせないよう最大値制限
-                readBytes = stream.Read(bytes, 0, Math.Min(BufferSize, available.Value));
-                buffer.AddRange(bytes.Take(readBytes));
+                readBytes = stream.Read(buffer, 0, Math.Min(BufferSize, available.Value));
+                data.AddRange(buffer.Take(readBytes));
             }
 
             // 読み込んだ量を引きます
@@ -46,9 +45,9 @@ namespace Network
             // すべて読みだした
             if (available <= 0)
             {
-                res = buffer.ToArray();
+                res = data.ToArray();
                 available = null;
-                buffer.Clear();
+                data.Clear();
                 return true;
             }
             return false;
